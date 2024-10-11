@@ -7,11 +7,14 @@
 #define IR_SENSOR_LEFT_PIN 8  // Left IR sensor for line following
 #define IR_SENSOR_RIGHT_PIN 9 // Right IR sensor for line following
 #define LED_PIN 10  // Pin for LED
+#define SERVO_PIN 11 // Pin for the servo motor
 
 // Bluetooth Serial
 #include <SoftwareSerial.h>
+#include <Servo.h> // Include the Servo library
 
-SoftwareSerial BTSerial(11, 12); // RX, TX for HC-05
+SoftwareSerial BTSerial(12, 13); // RX, TX for HC-05
+Servo myServo; // Create a servo object
 
 void setup() {
     // Set motor pins as outputs
@@ -29,6 +32,10 @@ void setup() {
     
     // Set LED pin as output
     pinMode(LED_PIN, OUTPUT);
+    
+    // Initialize the servo
+    myServo.attach(SERVO_PIN); // Attach the servo to the specified pin
+    myServo.write(0); // Start the servo at 0 degrees
     
     // Start motors in a neutral state
     stopMotors();
@@ -73,6 +80,11 @@ void loop() {
 }
 
 void waitAtEnd() {
+    // Move the servo to 90 degrees
+    myServo.write(90);
+    delay(2500);  // Wait for 2.5 seconds
+    myServo.write(0); // Move the servo back to 0 degrees
+
     delay(60000);  // Wait for 60 seconds before returning
     returnToStart();  // Move back to the starting position
 }
