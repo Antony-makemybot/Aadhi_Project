@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project implements a line-following robot controlled by an Arduino. The robot utilizes two IR sensors for line detection and can navigate autonomously. It also includes a Bluetooth module (HC-05) for remote control and a servo motor that reacts when the robot reaches the end of the line.
+This project implements a line-following robot controlled by an Arduino. The robot utilizes two IR sensors for line detection and can navigate autonomously. It includes a Bluetooth module (HC-05) for remote control and a servo motor that reacts when the robot reaches the end of the line.
 
 ### Author: Antony Juza
 
@@ -10,7 +10,7 @@ This project implements a line-following robot controlled by an Arduino. The rob
 
 - **Line Following**: The robot follows a predefined line using IR sensors.
 - **Bluetooth Control**: Commands can be sent via a mobile app to control the robot's movements.
-- **Servo Motor Activation**: When the robot reaches the end of the line, a servo motor moves to a specified angle and waits before returning to the starting position.
+- **Servo Motor Activation**: When the robot reaches the end of the line, a servo motor moves to 90 degrees and waits before returning to 0 degrees.
 - **LED Indicator**: An LED blinks to indicate the robot's operational status.
 
 ## Hardware Requirements
@@ -41,7 +41,7 @@ This project implements a line-following robot controlled by an Arduino. The rob
 | LED_PIN               | 10          |
 | HC-05 RX              | 11          |
 | HC-05 TX              | 12          |
-| Servo Signal Pin      | 10          |
+| Servo Signal Pin      | 11          |
 
 ## Installation
 
