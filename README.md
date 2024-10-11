@@ -26,6 +26,7 @@ This project implements a line-following robot controlled by an Arduino. The rob
 ## Circuit Diagram
 
 ![Circuit Diagram](DemoCKT.png)
+For a detailed circuit diagram, visit: [Circuit Diagram Link](https://www.tinkercad.com/things/i6LlTWV21L8-aadhi-project-ckt?sharecode=nKdkUjUxs9OYDsy3M79F352fQ4dGYsdn1EHI2Xtks2A)
 ## Connections
 
 | Component             | Arduino Pin |
