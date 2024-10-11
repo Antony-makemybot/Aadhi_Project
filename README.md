@@ -25,8 +25,7 @@ This project implements a line-following robot controlled by an Arduino. The rob
 
 ## Circuit Diagram
 
-*(Include a circuit diagram if available)*
-
+![Circuit Diagram](Aadhi_Project/Terrific Bojo.png)
 ## Connections
 
 | Component             | Arduino Pin |
