@@ -24,6 +24,16 @@ Servo myServo;
 bool firstSignalReceived = false; // Track the first signal
 unsigned long lastPIRSignalTime = 0; // To time out after the second signal
 
+// State management for line following
+enum State {
+    FOLLOWING_LINE,
+    WAITING_AT_END,
+    RETURNING
+};
+
+State currentState = FOLLOWING_LINE;
+unsigned long waitStartTime = 0;
+
 void setup() {
     // Set motor pins as outputs
     pinMode(IN1, OUTPUT);
@@ -53,29 +63,74 @@ void setup() {
 }
 
 void loop() {
-    // Read the line following IR sensor values
-    lineFollowing();
-
-    // Manage the PIR sensor
+    // Manage PIR sensor
     managePIRSensor();
 
-    // Manage the LED blinking
+    // Manage LED blinking
     manageLED();
+
+    // Handle current state
+    switch (currentState) {
+        case FOLLOWING_LINE:
+            lineFollowing();
+            break;
+        case WAITING_AT_END:
+            waitAtEnd();
+            break;
+        case RETURNING:
+            returnToStart();
+            break;
+    }
 }
 
 void lineFollowing() {
     int leftSensorValue = digitalRead(LEFT_IR_SENSOR_PIN);
     int rightSensorValue = digitalRead(RIGHT_IR_SENSOR_PIN);
     
-    if (leftSensorValue == HIGH && rightSensorValue == HIGH) {
-        moveForward();
-    } else if (leftSensorValue == LOW && rightSensorValue == HIGH) {
-        turnRight();
-    } else if (leftSensorValue == HIGH && rightSensorValue == LOW) {
-        turnLeft();
-    } else {
+    // Detecting the end of the line
+    if (leftSensorValue == LOW && rightSensorValue == LOW) {
+        // Both sensors lose the line, assume end of the line
+        currentState = WAITING_AT_END;
+        waitStartTime = millis(); // Start the wait timer
         stopMotors();
+    } else {
+        // Normal line following logic
+        if (leftSensorValue == HIGH && rightSensorValue == HIGH) {
+            moveForward();
+        } else if (leftSensorValue == LOW && rightSensorValue == HIGH) {
+            turnRight();
+        } else if (leftSensorValue == HIGH && rightSensorValue == LOW) {
+            turnLeft();
+        } else {
+            stopMotors();
+        }
     }
+}
+
+void waitAtEnd() {
+    // Wait for 60 seconds at the end of the line
+    if (millis() - waitStartTime >= 60000) { // 60 seconds
+        currentState = RETURNING; // Move to return state
+    }
+}
+
+void returnToStart() {
+    // Implement logic to return to the starting position
+    // Here we will turn around and move forward
+    turnAround();
+    moveForward(); // Move in the opposite direction
+    
+    // Assume you want to return until you detect the line again
+    if (digitalRead(LEFT_IR_SENSOR_PIN) == HIGH || digitalRead(RIGHT_IR_SENSOR_PIN) == HIGH) {
+        currentState = FOLLOWING_LINE; // Back to line following
+    }
+}
+
+void turnAround() {
+    // Simple 180-degree turn logic
+    turnLeft(); // Turn left for a moment
+    delay(500); // Adjust delay for your turn speed
+    stopMotors(); // Stop before moving forward
 }
 
 void managePIRSensor() {
